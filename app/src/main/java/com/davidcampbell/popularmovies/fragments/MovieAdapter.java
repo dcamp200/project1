@@ -25,7 +25,7 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w185/";
     private final Context mContext;
     private List<Movie> mMovies;
-    private LayoutInflater layoutInflater;
+    private LayoutInflater mLayoutInflater;
 
 
     public MovieAdapter(Context context, List<Movie> movies) {
@@ -33,7 +33,7 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
         Log.d(LOG_TAG, "Initializing Grid Adapter...");
         this.mContext = context;
         this.mMovies = movies;
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //Log.d(LOG_TAG, "Adding new movie to grid...");
-        View gridItemView = layoutInflater.inflate(R.layout.movie_poster_item, parent, false);
+        View gridItemView = mLayoutInflater.inflate(R.layout.movie_poster_item, parent, false);
         ImageView moviePoster = (ImageView) gridItemView.findViewById(R.id.posterImage);
 
         Movie movie = mMovies.get(position);

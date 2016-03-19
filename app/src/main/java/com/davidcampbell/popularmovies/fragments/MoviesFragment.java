@@ -29,7 +29,7 @@ import java.util.List;
 public class MoviesFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static String LOG_TAG = MoviesFragment.class.getSimpleName();
     public enum Order {MOST_POPULAR,TOP_RATED}
-    private GridView posterGrid;
+    private GridView mPosterGrid;
     private MovieAdapter mGridArrayAdapter;
 
     public MoviesFragment() {
@@ -49,12 +49,12 @@ public class MoviesFragment extends Fragment implements SharedPreferences.OnShar
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
 
-        posterGrid = (GridView)rootView.findViewById(R.id.posterGrid);
+        mPosterGrid = (GridView)rootView.findViewById(R.id.posterGrid);
 
         mGridArrayAdapter = new MovieAdapter(this.getActivity(), new ArrayList<Movie>());
-        posterGrid.setAdapter(mGridArrayAdapter);
+        mPosterGrid.setAdapter(mGridArrayAdapter);
 
-        posterGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mPosterGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
