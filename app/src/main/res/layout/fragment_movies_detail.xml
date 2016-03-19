@@ -1,0 +1,86 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.davidcampbell.popularmovies.fragments.MoviesDetailFragment">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView android:id="@+id/movieName"
+            android:layout_width="match_parent"
+            android:layout_height="140sp"
+            tools:text="Movie Title"
+            android:textSize="56sp"
+            android:textColor="@android:color/white"
+            android:gravity="center_vertical"
+            android:background="#009688"
+            android:padding="20dp"
+            />
+
+
+        <ImageView android:id="@+id/poster"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_below="@id/movieName"
+            android:layout_alignLeft="@id/movieName"
+            android:src="@drawable/ic_theaters_black_24dp"
+            />
+
+
+        <TextView android:id="@+id/year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/poster"
+            android:layout_below="@id/movieName"
+            android:layout_marginTop="25dp"
+            tools:text="2016"
+            android:textSize="32sp"
+            android:textColor="@android:color/darker_gray"
+            android:gravity="left"
+            android:background="@android:color/white"
+            />
+
+        <TextView android:id="@+id/length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/poster"
+            android:layout_below="@id/year"
+            android:layout_marginTop="10dp"
+            tools:text="120min"
+            android:textSize="24sp"
+            android:textColor="@android:color/darker_gray"
+            android:textStyle="italic"
+            android:gravity="left"
+            android:background="@android:color/white"
+            />
+
+        <TextView android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/poster"
+            android:layout_below="@id/length"
+            android:layout_marginTop="10dp"
+            tools:text="8/1/10"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"
+            android:gravity="left"
+            android:background="@android:color/white"
+            />
+
+        <TextView android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/poster"
+            android:layout_margin="15dp"
+            tools:text="Every child comes into the world full of promise, and none more so than Chappie: he is gifted, special, a prodigy. Chappie he is a robot."
+            android:textSize="15sp"
+            android:textColor="@android:color/darker_gray"
+            android:gravity="left"
+            android:background="@android:color/white"
+            />
+
+    </RelativeLayout>
+</FrameLayout>
