@@ -1,11 +1,13 @@
 package com.davidcampbell.popularmovies;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -19,7 +21,7 @@ import android.preference.PreferenceManager;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity implements Preference.OnPreferenceChangeListener {
-
+   private static final String LOG_TAG = SettingsActivity.class.getSimpleName();
 
 
     @Override
@@ -54,15 +56,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Pre
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
         String stringValue = value.toString();
-
-        if (preference instanceof ListPreference) {
-            // For list preferences, look up the correct display value in
-            // the preference's 'entries' list (since they have separate labels/values).
-            ListPreference listPreference = (ListPreference) preference;
-            int prefIndex = listPreference.findIndexOfValue(stringValue);
-            if (prefIndex >= 0) {
-                preference.setSummary(listPreference.getEntries()[prefIndex]);
-            }
+        String key = preference.getKey();
+        if (key.equals(getString(R.string.pref_sortOrder_key))) {
+            String order = (String)value;
+            Log.d(LOG_TAG,"Sort order changed to:" + order);
+            SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.pref_sortOrder_key), order);
+            editor.commit();
+            preference.setSummary(stringValue);
         } else {
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
