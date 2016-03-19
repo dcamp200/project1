@@ -1,6 +1,7 @@
 package com.davidcampbell.popularmovies.domain;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * PopularMovies
@@ -133,5 +134,25 @@ public class Movie implements Serializable{
 
     public void setVote_average(double vote_average) {
         this.vote_average = vote_average;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", poster_path='" + poster_path + '\'' +
+                ", adult=" + adult +
+                ", overview='" + overview + '\'' +
+                ", genre_ids=" + Arrays.toString(genre_ids) +
+                ", original_title='" + original_title + '\'' +
+                ", original_language='" + original_language + '\'' +
+                ", backdrop_path='" + backdrop_path + '\'' +
+                ", popularity=" + popularity +
+                ", vote_count=" + vote_count +
+                ", video=" + video +
+                ", vote_average=" + vote_average +
+                ", release_date='" + release_date + '\'' +
+                '}';
     }
 }
