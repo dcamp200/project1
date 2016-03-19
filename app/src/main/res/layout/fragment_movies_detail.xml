@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="140sp"
             tools:text="Movie Title"
-            android:textSize="56sp"
+            android:textSize="32sp"
             android:textColor="@android:color/white"
             android:gravity="center_vertical"
             android:background="#009688"
@@ -27,6 +27,7 @@
             android:layout_below="@id/movieName"
             android:layout_alignLeft="@id/movieName"
             android:src="@drawable/ic_theaters_black_24dp"
+            android:layout_marginTop="20dp"
             />
 
 
@@ -57,7 +58,7 @@
             android:background="@android:color/white"
             />
 
-        <TextView android:id="@+id/date"
+        <TextView android:id="@+id/releasedate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/poster"
@@ -70,17 +71,39 @@
             android:background="@android:color/white"
             />
 
-        <TextView android:id="@+id/description"
+        <TextView android:id="@+id/userRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/poster"
-            android:layout_margin="15dp"
-            tools:text="Every child comes into the world full of promise, and none more so than Chappie: he is gifted, special, a prodigy. Chappie he is a robot."
-            android:textSize="15sp"
+            android:layout_toRightOf="@id/poster"
+            android:layout_below="@id/releasedate"
+            android:layout_marginTop="10dp"
+            tools:text="* * * * *"
+            android:textSize="16sp"
             android:textColor="@android:color/darker_gray"
             android:gravity="left"
             android:background="@android:color/white"
             />
+
+
+        <ScrollView android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/poster"
+            android:layout_marginTop="20dp"
+             >
+
+            <TextView android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                tools:text="Every child comes into the world full of promise, and none more so than Chappie: he is gifted, special, a prodigy. Chappie he is a robot."
+                android:textSize="15sp"
+                android:textColor="@android:color/darker_gray"
+                android:gravity="left"
+                android:background="@android:color/white"
+                />
+
+        </ScrollView>
 
     </RelativeLayout>
 </FrameLayout>
