@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class MoviesFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static String LOG_TAG = MoviesFragment.class.getSimpleName();
-
+    public enum Order {MOST_POPULAR,TOP_RATED}
     private GridView posterGrid;
     private MovieAdapter mGridArrayAdapter;
 
@@ -72,7 +72,7 @@ public class MoviesFragment extends Fragment implements SharedPreferences.OnShar
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(LOG_TAG,"On resume");
+        Log.d(LOG_TAG, "On resume");
     }
 
     @Override
@@ -101,11 +101,7 @@ public class MoviesFragment extends Fragment implements SharedPreferences.OnShar
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         String order = sharedPreferences.getString(getString(R.string.pref_sortOrder_key), getString(R.string.pref_sort_order_default));
-        if(order.equals("Most Popular")) {
-            new FetchPopularMoviesTask().execute();
-        } else if(order.equals("Top Rated")) {
-            new FetchTopRatedMoviesTask().execute();
-        }
+        fetchMovies(order);
     }
 
     @Override
@@ -118,58 +114,46 @@ public class MoviesFragment extends Fragment implements SharedPreferences.OnShar
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.d(LOG_TAG,"Preference change..." + key);
+        Log.d(LOG_TAG, "Preference change..." + key);
         if (key.equals(getString(R.string.pref_sortOrder_key))) {
             String order = sharedPreferences.getString(getString(R.string.pref_sortOrder_key), getString(R.string.pref_sort_order_default));
             Log.d(LOG_TAG, "New Sort order: Changed to:" + order);
-            if(order.equals("Most Popular")) {
-                new FetchPopularMoviesTask().execute();
-            } else if(order.equals("Top Rated")) {
-                new FetchTopRatedMoviesTask().execute();
+            fetchMovies(order);
+        }
+    }
+
+    private void fetchMovies(String order) {
+        new FetchMoviesTask().execute(order);
+
+    }
+
+    class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
+
+        @Override
+        protected List<Movie> doInBackground(String... params) {
+            String order = params[0];
+            Log.d(LOG_TAG, "Fetching movies based on " + order);
+            MovieWebService movieWebService = new RetrofitMovieWebService();
+            switch(order) {
+                case "Most Popular":
+                    Log.d(LOG_TAG, "Fetching popular movies...");
+                    return movieWebService.getPopularMovies();
+                case "Top Rated":
+                    Log.d(LOG_TAG, "Fetching top rated movies...");
+                    return movieWebService.getTopRatedMovies();
+                default:
+                    return null;
             }
         }
-    }
-
-
-    class FetchPopularMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
-
-        @Override
-        protected List<Movie> doInBackground(Void... params) {
-            Log.d(LOG_TAG, "Fetching popular movies...");
-            MovieWebService movieWebService = new RetrofitMovieWebService();
-            List<Movie> popularMovies = movieWebService.getPopularMovies();
-            return popularMovies;
-        }
 
         @Override
         protected void onPostExecute(List<Movie> movies) {
             super.onPostExecute(movies);
-            Log.d(LOG_TAG, "Returned " + movies.size() + " popular movies.");
+            Log.d(LOG_TAG, "Returned " + movies.size() + " movies.");
             mGridArrayAdapter.clear();
             mGridArrayAdapter.addAll(movies);
             mGridArrayAdapter.notifyDataSetChanged();
-            Log.d(LOG_TAG, "Popular Movies loaded");
-        }
-    }
-
-    class FetchTopRatedMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
-
-        @Override
-        protected List<Movie> doInBackground(Void... params) {
-            Log.d(LOG_TAG, "Fetching top rated movies...");
-            MovieWebService movieWebService = new RetrofitMovieWebService();
-            List<Movie> topRatedMovies = movieWebService.getTopRatedMovies();
-            return topRatedMovies;
-        }
-
-        @Override
-        protected void onPostExecute(List<Movie> movies) {
-            super.onPostExecute(movies);
-            Log.d(LOG_TAG, "Returned " + movies.size() + " top rated movies.");
-            mGridArrayAdapter.clear();
-            mGridArrayAdapter.addAll(movies);
-            mGridArrayAdapter.notifyDataSetChanged();
-            Log.d(LOG_TAG, "Top Rated Movies loaded");
+            Log.d(LOG_TAG, "New Movies loaded");
         }
     }
 
