@@ -51,7 +51,7 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
     public View getView(int position, View convertView, ViewGroup parent) {
         //Log.d(LOG_TAG, "Adding new movie to grid...");
         ViewHolder viewHolder;
-        View gridItemView;
+
         if (convertView == null) {
             Log.d(LOG_TAG, "Adding new viewholder...");
             convertView = mLayoutInflater.inflate(R.layout.movie_poster_item, parent, false);

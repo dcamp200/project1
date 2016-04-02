@@ -18,7 +18,7 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'MOVIEDB_API_KEY', "\"INSERT MOVIE API HERE\""
+        it.buildConfigField 'String', 'MOVIEDB_API_KEY', "\"87f6668bb72cd57878b5ba8275cbe2ad\""
     }
 
 }
