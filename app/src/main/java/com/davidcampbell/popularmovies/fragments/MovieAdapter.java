@@ -50,13 +50,33 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //Log.d(LOG_TAG, "Adding new movie to grid...");
-        View gridItemView = mLayoutInflater.inflate(R.layout.movie_poster_item, parent, false);
-        ImageView moviePoster = (ImageView) gridItemView.findViewById(R.id.posterImage);
-
+        ViewHolder viewHolder;
+        View gridItemView;
+        if (convertView == null) {
+            Log.d(LOG_TAG, "Adding new viewholder...");
+            convertView = mLayoutInflater.inflate(R.layout.movie_poster_item, parent, false);
+            viewHolder = new ViewHolder();
+            viewHolder.moviePoster = (ImageView) convertView.findViewById(R.id.posterImage);
+            convertView.setTag(viewHolder);
+        } else {
+            Log.d(LOG_TAG, "Re-using existing viewholder...");
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+        Log.d(LOG_TAG, "Adding new movie to grid...");
         Movie movie = mMovies.get(position);
         String posterUrl = BASE_IMAGE_URL + movie.getPoster_path();
         Log.d(LOG_TAG, "Poster url = " + posterUrl);
-        Picasso.with(mContext).load(posterUrl).into(moviePoster);
-        return gridItemView;
+        Picasso.with(mContext).load(posterUrl).into(viewHolder.moviePoster);
+        Log.d(LOG_TAG, "Returning view...");
+        return convertView;
+    }
+
+
+    /**
+     * ViewHolder design pattern
+     * @link http://developer.android.com/training/improving-layouts/smooth-scrolling.html
+     */
+    static class ViewHolder {
+        ImageView moviePoster;
     }
 }

@@ -29,6 +29,9 @@ public class MoviesDetailFragment extends Fragment {
     @Bind(R.id.movieName) TextView movieName;
     @Bind(R.id.releasedate) TextView releaseDate;
     @Bind(R.id.userRating) TextView userRating;
+    @Bind(R.id.year) TextView yearView;
+    @Bind(R.id.description) TextView descriptionView;
+
 
     public MoviesDetailFragment() {
         // Required empty public constructor
@@ -49,10 +52,8 @@ public class MoviesDetailFragment extends Fragment {
         ButterKnife.bind(this,rootView);
         Movie movie  = (Movie) getActivity().getIntent().getSerializableExtra("movie");
         Log.d(LOG_TAG, "Movie.." + movie);
-        String year = movie.getRelease_date().substring(0,4);
-        String description = movie.getOverview();
-        ((TextView)rootView.findViewById(R.id.year)).setText(year);
-        ((TextView)rootView.findViewById(R.id.description)).setText(description);
+        yearView.setText(movie.getRelease_date().substring(0,4));
+        descriptionView.setText(movie.getOverview());
         movieName.setText(movie.getOriginal_title());
         releaseDate.setText(movie.getRelease_date());
         userRating.setText(Double.toString(movie.getVote_average()));
