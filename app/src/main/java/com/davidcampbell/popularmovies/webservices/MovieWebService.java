@@ -1,6 +1,8 @@
 package com.davidcampbell.popularmovies.webservices;
 
 import com.davidcampbell.popularmovies.domain.Movie;
+import com.davidcampbell.popularmovies.domain.Review;
+import com.davidcampbell.popularmovies.domain.Trailer;
 
 import java.util.List;
 
@@ -21,4 +23,19 @@ public interface MovieWebService {
      * @return List<Movie>  a list of {@link Movie} objects
      */
     List<Movie> getTopRatedMovies();
+
+
+    /**
+     * Method to return a movie's associated trailers
+     * @param movieId
+     * @return List<Trailer> A list of {@link Trailer} objects
+     */
+    List<Trailer> getTrailers(long movieId);
+
+    /**
+     * Method to return a movie's associated reviews
+     * @param movieId
+     * @return List<Review> A list of {@link Review} objects
+     */
+    List<Review> getReviews(long movieId);
 }

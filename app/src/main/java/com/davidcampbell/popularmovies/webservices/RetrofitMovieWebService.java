@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.davidcampbell.popularmovies.BuildConfig;
 import com.davidcampbell.popularmovies.domain.Movie;
+import com.davidcampbell.popularmovies.domain.Review;
+import com.davidcampbell.popularmovies.domain.Trailer;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.List;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.http.GET;
+import retrofit.http.Path;
 
 /**
  * PopularMovies
@@ -27,7 +30,7 @@ public class RetrofitMovieWebService implements MovieWebService {
 
     public RetrofitMovieWebService() {
         movieDBRestAdapter = new RestAdapter.Builder()
-                //.setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setRequestInterceptor(movieDBRequestInterceptor)
                 .setEndpoint(endPoint).build();
         movieDBRestService = movieDBRestAdapter.create(MovieDBRestService.class);
@@ -47,7 +50,17 @@ public class RetrofitMovieWebService implements MovieWebService {
         return (moviesResponse != null) ? moviesResponse.getResults() : Collections.<Movie>emptyList();
     }
 
+    @Override
+    public List<Review> getReviews(long movieId) {
+        ReviewsResponse reviewsResponse = movieDBRestService.getMovieReviews(movieId);
+        return (reviewsResponse != null) ? reviewsResponse.getResults() : Collections.<Review>emptyList();
+    }
 
+    @Override
+    public List<Trailer> getTrailers(long movieId) {
+        TrailerResponse trailerResponse = movieDBRestService.getMovieTrailers(movieId);
+        return (trailerResponse != null) ? trailerResponse.getResults() : Collections.<Trailer>emptyList();
+    }
 
 
     /** RetroFit interfaces **/
@@ -60,6 +73,14 @@ public class RetrofitMovieWebService implements MovieWebService {
         // e.g. http://api.themoviedb.org/3/movie/top_rated?api_key
         @GET("/3/movie/top_rated")
         MoviesResponse getTopRatedMovies();
+
+        // e.g. http://api.themoviedb.org/3/movie/{id}/videos?api_key
+        @GET("/3/movie/{id}/videos")
+        TrailerResponse getMovieTrailers(@Path("id") long id);
+
+        // e.g. http://api.themoviedb.org/3/movie/{id}/reviews?api_key
+        @GET("/3/movie/{id}/reviews")
+        ReviewsResponse getMovieReviews(@Path("id") long id);
 
     }
 
@@ -105,6 +126,87 @@ public class RetrofitMovieWebService implements MovieWebService {
         }
 
         public void setResults(List<Movie> results) {
+            this.results = results;
+        }
+    }
+
+
+    /**
+     * TrailersResponse
+     * Helper class used to model trailers query response
+     */
+    class TrailerResponse {
+        private int id;
+        private List<Trailer> results;
+
+        public TrailerResponse() {
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public List<Trailer> getResults() {
+            return results;
+        }
+
+        public void setResults(List<Trailer> results) {
+            this.results = results;
+        }
+    }
+
+
+    class ReviewsResponse {
+        private int id;
+        private int page;
+        private int totalPages;
+        private int totalresults;
+        private List<Review> results;
+
+        public ReviewsResponse() {
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public int getPage() {
+            return page;
+        }
+
+        public void setPage(int page) {
+            this.page = page;
+        }
+
+        public int getTotalPages() {
+            return totalPages;
+        }
+
+        public void setTotalPages(int totalPages) {
+            this.totalPages = totalPages;
+        }
+
+        public int getTotalresults() {
+            return totalresults;
+        }
+
+        public void setTotalresults(int totalresults) {
+            this.totalresults = totalresults;
+        }
+
+        public List<Review> getResults() {
+            return results;
+        }
+
+        public void setResults(List<Review> results) {
             this.results = results;
         }
     }

@@ -38,6 +38,7 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
 
     @Override
     public int getCount() {
+        Log.d(LOG_TAG, "Adapter count:" + mMovies.size());
         return mMovies.size();
     }
 

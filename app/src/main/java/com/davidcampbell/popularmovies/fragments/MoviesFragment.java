@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.davidcampbell.popularmovies.MovieDetailActivity;
@@ -23,13 +22,18 @@ import com.davidcampbell.popularmovies.webservices.RetrofitMovieWebService;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MoviesFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static String LOG_TAG = MoviesFragment.class.getSimpleName();
     public enum Order {MOST_POPULAR,TOP_RATED}
-    private GridView mPosterGrid;
+
+    @Bind(R.id.posterGrid) GridView mPosterGrid;
     private MovieAdapter mGridArrayAdapter;
 
     public MoviesFragment() {
@@ -48,25 +52,19 @@ public class MoviesFragment extends Fragment implements SharedPreferences.OnShar
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
-
-        mPosterGrid = (GridView)rootView.findViewById(R.id.posterGrid);
-
+        ButterKnife.bind(this,rootView);
         mGridArrayAdapter = new MovieAdapter(this.getActivity(), new ArrayList<Movie>());
         mPosterGrid.setAdapter(mGridArrayAdapter);
-
-        mPosterGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Movie movie = mGridArrayAdapter.getItem(position);
-                Log.d(LOG_TAG, "Showing details of movie :" + movie);
-                Intent intent = new Intent(MoviesFragment.this.getActivity(), MovieDetailActivity.class);
-                intent.putExtra("movie", movie);
-                startActivity(intent);
-            }
-        });
-
         return rootView;
+    }
+
+    @OnItemClick(R.id.posterGrid)
+    void showMovieDetails(int position) {
+        Movie movie = mGridArrayAdapter.getItem(position);
+        Log.d(LOG_TAG, "Showing details of movie :" + movie);
+        Intent intent = new Intent(MoviesFragment.this.getActivity(), MovieDetailActivity.class);
+        intent.putExtra("movie", movie);
+        startActivity(intent);
     }
 
     @Override

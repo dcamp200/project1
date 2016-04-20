@@ -1,13 +1,18 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="com.davidcampbell.popularmovies.fragments.MoviesDetailFragment">
 
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView android:id="@+id/movieName"
             android:layout_width="match_parent"
@@ -94,7 +99,7 @@
              >
 
             <TextView android:id="@+id/description"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 tools:text="Every child comes into the world full of promise, and none more so than Chappie: he is gifted, special, a prodigy. Chappie he is a robot."
@@ -107,4 +112,12 @@
         </ScrollView>
 
     </RelativeLayout>
-</FrameLayout>
+
+    <ExpandableListView android:id="@+id/reviewsAndTrailerslist"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"></ExpandableListView>
+
+
+</LinearLayout>
+
+</ScrollView>
