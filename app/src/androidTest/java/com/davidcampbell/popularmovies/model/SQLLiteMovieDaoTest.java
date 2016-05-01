@@ -12,6 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Set;
+
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
@@ -69,6 +72,16 @@ public class SQLLiteMovieDaoTest {
         movie.setId(999999);
         assertFalse(dao.checkIfFavorite(movie));
     }
+
+    @Test
+    public void testFindAllMovies() throws Exception {
+        Movie movie = TestMovieFactory.getMovieInstance();
+        addFavorite(movie);
+        SQLLiteMovieDao dao = new SQLLiteMovieDao(InstrumentationRegistry.getTargetContext());
+        Set<Movie> movies =  dao.findAll();
+        assertEquals(1, movies.size());
+    }
+
 
 
     private void verifyAdd() {

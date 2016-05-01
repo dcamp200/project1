@@ -89,6 +89,13 @@
             android:background="@android:color/white"
             />
 
+        <ImageButton android:id="@+id/favButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_favorite_default"
+            android:layout_below="@+id/userRating"
+            android:layout_toRightOf="@id/poster"
+            />
 
         <ScrollView android:id="@+id/scrollView"
             android:layout_width="match_parent"

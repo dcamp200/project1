@@ -16,6 +16,8 @@ import android.widget.GridView;
 import com.davidcampbell.popularmovies.MovieDetailActivity;
 import com.davidcampbell.popularmovies.R;
 import com.davidcampbell.popularmovies.domain.Movie;
+import com.davidcampbell.popularmovies.model.MovieDao;
+import com.davidcampbell.popularmovies.model.SQLLiteMovieDao;
 import com.davidcampbell.popularmovies.webservices.MovieWebService;
 import com.davidcampbell.popularmovies.webservices.RetrofitMovieWebService;
 
@@ -120,9 +122,11 @@ public class MoviesFragment extends Fragment implements SharedPreferences.OnShar
         }
     }
 
+
+
+
     private void fetchMovies(String order) {
         new FetchMoviesTask().execute(order);
-
     }
 
     class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
@@ -139,6 +143,10 @@ public class MoviesFragment extends Fragment implements SharedPreferences.OnShar
                 case "Top Rated":
                     Log.d(LOG_TAG, "Fetching top rated movies...");
                     return movieWebService.getTopRatedMovies();
+                case "My Favorites":
+                    Log.d(LOG_TAG, "Fetching favourite movies...");
+                    MovieDao dao = new SQLLiteMovieDao(getActivity());
+                    return dao.findAll();
                 default:
                     return null;
             }

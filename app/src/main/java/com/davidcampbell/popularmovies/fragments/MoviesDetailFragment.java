@@ -1,6 +1,8 @@
 package com.davidcampbell.popularmovies.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +19,8 @@ import com.davidcampbell.popularmovies.R;
 import com.davidcampbell.popularmovies.domain.Movie;
 import com.davidcampbell.popularmovies.domain.Review;
 import com.davidcampbell.popularmovies.domain.Trailer;
+import com.davidcampbell.popularmovies.model.MovieDao;
+import com.davidcampbell.popularmovies.model.SQLLiteMovieDao;
 import com.davidcampbell.popularmovies.webservices.MovieWebService;
 import com.davidcampbell.popularmovies.webservices.RetrofitMovieWebService;
 import com.squareup.picasso.Picasso;
@@ -28,6 +33,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,9 +51,16 @@ public class MoviesDetailFragment extends Fragment {
     @Bind(R.id.userRating) TextView userRating;
     @Bind(R.id.year) TextView yearView;
     @Bind(R.id.description) TextView descriptionView;
+    @Bind(R.id.favButton) ImageButton favButton;
 
     private TrailerAdapter mTrailerAdapter;
     private ReviewAdapter mReviewAdapter;
+    private MovieDao movieDao;
+    private Movie mMovie;
+    private Bitmap favourited;
+    private Bitmap notFavourited;
+
+
 
     @Bind(R.id.reviewsAndTrailerslist)ExpandableListView expandableListView;
     private ExpandableListAdapter expandableListAdapter;
@@ -56,6 +69,7 @@ public class MoviesDetailFragment extends Fragment {
     public MoviesDetailFragment() {
         // Required empty public constructor
     }
+
 
 
     @Override
@@ -68,8 +82,12 @@ public class MoviesDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.d(LOG_TAG, "Inflating details fragment...");
+        movieDao = new SQLLiteMovieDao(getActivity());
         View rootView = inflater.inflate(R.layout.fragment_movies_detail, container, false);
         ButterKnife.bind(this,rootView);
+        favourited = BitmapFactory.decodeResource(getResources(), R.drawable.icon_favorite_active);
+        notFavourited = BitmapFactory.decodeResource(getResources(), R.drawable.icon_favorite_default);
+
 
         Map<String, List<?>> children = new HashMap<>();
         children.put("Trailers", new ArrayList<>());
@@ -78,16 +96,24 @@ public class MoviesDetailFragment extends Fragment {
         expandableListView.setAdapter(expandableListAdapter);
         expandableListView.setFocusable(false);
 
-        Movie movie  = (Movie) getActivity().getIntent().getSerializableExtra("movie");
-        new FetchMovieTrailersTask().execute(movie.getId());
-        new FetchMovieReviewsTask().execute(movie.getId());
-        Log.d(LOG_TAG, "Movie.." + movie);
-        yearView.setText(movie.getRelease_date().substring(0,4));
-        descriptionView.setText(movie.getOverview());
-        movieName.setText(movie.getOriginal_title());
-        releaseDate.setText(movie.getRelease_date());
-        userRating.setText(Double.toString(movie.getVote_average()));
-        String posterUrl = BASE_IMAGE_URL + movie.getPoster_path();
+        mMovie = (Movie) getActivity().getIntent().getSerializableExtra("movie");
+        if (mMovie != null) {
+           if (movieDao.checkIfFavorite(mMovie)) {
+               favButton.setImageBitmap(favourited);
+           } else {
+               favButton.setImageBitmap(notFavourited);
+           }
+        }
+
+        new FetchMovieTrailersTask().execute(mMovie.getId());
+        new FetchMovieReviewsTask().execute(mMovie.getId());
+        Log.d(LOG_TAG, "Movie.." + mMovie);
+        yearView.setText(mMovie.getRelease_date().substring(0,4));
+        descriptionView.setText(mMovie.getOverview());
+        movieName.setText(mMovie.getOriginal_title());
+        releaseDate.setText(mMovie.getRelease_date());
+        userRating.setText(Double.toString(mMovie.getVote_average()));
+        String posterUrl = BASE_IMAGE_URL + mMovie.getPoster_path();
         Picasso.with(getActivity()).load(posterUrl).into(moviePoster);
         return rootView;
     }
@@ -96,6 +122,7 @@ public class MoviesDetailFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        //movieDao = new SQLLiteMovieDao(getActivity());
     }
 
     @Override
@@ -103,6 +130,18 @@ public class MoviesDetailFragment extends Fragment {
         super.onDetach();
     }
 
+
+    @OnClick(R.id.favButton)
+    public void onClickFavorite() {
+        Log.d(LOG_TAG, "Fav button clicked");
+        if(movieDao.checkIfFavorite(mMovie)) {
+            movieDao.removeFromFavorites(mMovie);
+            favButton.setImageBitmap(notFavourited);
+        } else {
+            movieDao.addToFavorites(mMovie);
+            favButton.setImageBitmap(favourited);
+        }
+    }
 
 
     class FetchMovieTrailersTask extends AsyncTask<Long, Void, List<Trailer>> {

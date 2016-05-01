@@ -12,11 +12,13 @@
     <string-array name="pref_sortOrder_list_titles">
         <item>Most Popular</item>
         <item>Top Rated</item>
+        <item>My Favorites</item>
     </string-array>
 
     <string-array name="pref_sortOrder_list_values">
         <item>Most Popular</item>
         <item>Top Rated</item>
+        <item>My Favorites</item>
     </string-array>
 
 </resources>
