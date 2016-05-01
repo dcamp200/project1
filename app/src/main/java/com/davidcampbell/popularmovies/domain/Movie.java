@@ -7,7 +7,7 @@ import java.util.Arrays;
  * PopularMovies
  * Created by david on 2016-03-13.
  */
-public class Movie implements Serializable{
+public class Movie implements Serializable {
     private long id;
     private String title;
     private String poster_path;

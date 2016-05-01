@@ -25,6 +25,10 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/PrefTheme">
         </activity>
+
+        <provider
+            android:authorities="com.davidcampbell.popularmovies"
+            android:name=".model.MovieProvider" />
     </application>
 
 </manifest>
