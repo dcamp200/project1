@@ -10,21 +10,39 @@ import android.view.MenuItem;
 import com.davidcampbell.popularmovies.fragments.MoviesFragment;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private boolean mDualPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new MoviesFragment())
-                    .commit();
-        }
-
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
+        MoviesFragment moviesFragment = new MoviesFragment();
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, moviesFragment)
+                    .commit();
+        }
+
+        if (findViewById(R.id.details_container) != null) {
+            // two pane
+            mDualPane = true;
+            moviesFragment.setDualPane(true);
+//            MoviesDetailFragment moviesDetailFragment = MoviesDetailFragment.newInstance(null, mDualPane);
+//            moviesDetailFragment.setDualPane(true);
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.details_container, moviesDetailFragment)
+//                    .commit();
+        } else {
+            mDualPane = false;
+        }
+
+
 
     }
 

@@ -60,21 +60,42 @@ public class MoviesDetailFragment extends Fragment {
     private Bitmap favourited;
     private Bitmap notFavourited;
 
-
+    private boolean dualPane = false;
 
     @Bind(R.id.reviewsAndTrailerslist)ExpandableListView expandableListView;
     private ExpandableListAdapter expandableListAdapter;
+
+
+
+    public static MoviesDetailFragment newInstance(Movie movie, boolean dualPane) {
+        MoviesDetailFragment fragment = new MoviesDetailFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("movie", movie);
+        args.putBoolean("dualPane", dualPane);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
 
     public MoviesDetailFragment() {
         // Required empty public constructor
     }
 
+    public boolean isDualPane() {
+        return dualPane;
+    }
 
+    public void setDualPane(boolean dualPane) {
+        this.dualPane = dualPane;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mMovie = (Movie)getArguments().getSerializable("movie");
+            dualPane = getArguments().getBoolean("dualPane");
+        }
     }
 
     @Override
@@ -96,8 +117,22 @@ public class MoviesDetailFragment extends Fragment {
         expandableListView.setAdapter(expandableListAdapter);
         expandableListView.setFocusable(false);
 
-        mMovie = (Movie) getActivity().getIntent().getSerializableExtra("movie");
+
+        if (!dualPane) {
+            mMovie = (Movie) getActivity().getIntent().getSerializableExtra("movie");
+        }
+
         if (mMovie != null) {
+            new FetchMovieTrailersTask().execute(mMovie.getId());
+            new FetchMovieReviewsTask().execute(mMovie.getId());
+            Log.d(LOG_TAG, "Movie.." + mMovie);
+            yearView.setText(mMovie.getRelease_date().substring(0,4));
+            descriptionView.setText(mMovie.getOverview());
+            movieName.setText(mMovie.getOriginal_title());
+            releaseDate.setText(mMovie.getRelease_date());
+            userRating.setText(Double.toString(mMovie.getVote_average()));
+            String posterUrl = BASE_IMAGE_URL + mMovie.getPoster_path();
+            Picasso.with(getActivity()).load(posterUrl).into(moviePoster);
            if (movieDao.checkIfFavorite(mMovie)) {
                favButton.setImageBitmap(favourited);
            } else {
@@ -105,16 +140,7 @@ public class MoviesDetailFragment extends Fragment {
            }
         }
 
-        new FetchMovieTrailersTask().execute(mMovie.getId());
-        new FetchMovieReviewsTask().execute(mMovie.getId());
-        Log.d(LOG_TAG, "Movie.." + mMovie);
-        yearView.setText(mMovie.getRelease_date().substring(0,4));
-        descriptionView.setText(mMovie.getOverview());
-        movieName.setText(mMovie.getOriginal_title());
-        releaseDate.setText(mMovie.getRelease_date());
-        userRating.setText(Double.toString(mMovie.getVote_average()));
-        String posterUrl = BASE_IMAGE_URL + mMovie.getPoster_path();
-        Picasso.with(getActivity()).load(posterUrl).into(moviePoster);
+
         return rootView;
     }
 

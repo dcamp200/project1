@@ -34,6 +34,7 @@ import butterknife.OnItemClick;
 public class MoviesFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static String LOG_TAG = MoviesFragment.class.getSimpleName();
     public enum Order {MOST_POPULAR,TOP_RATED}
+    private boolean dualPane = false;
 
     @Bind(R.id.posterGrid) GridView mPosterGrid;
     private MovieAdapter mGridArrayAdapter;
@@ -43,6 +44,13 @@ public class MoviesFragment extends Fragment implements SharedPreferences.OnShar
     }
 
 
+    public boolean isDualPane() {
+        return dualPane;
+    }
+
+    public void setDualPane(boolean dualPane) {
+        this.dualPane = dualPane;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,9 +72,16 @@ public class MoviesFragment extends Fragment implements SharedPreferences.OnShar
     void showMovieDetails(int position) {
         Movie movie = mGridArrayAdapter.getItem(position);
         Log.d(LOG_TAG, "Showing details of movie :" + movie);
-        Intent intent = new Intent(MoviesFragment.this.getActivity(), MovieDetailActivity.class);
-        intent.putExtra("movie", movie);
-        startActivity(intent);
+        if (dualPane) {
+            MoviesDetailFragment moviesDetailFragment = MoviesDetailFragment.newInstance(movie, dualPane);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.details_container, moviesDetailFragment)
+                    .commit();
+        } else {
+            Intent intent = new Intent(MoviesFragment.this.getActivity(), MovieDetailActivity.class);
+            intent.putExtra("movie", movie);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -148,7 +163,8 @@ public class MoviesFragment extends Fragment implements SharedPreferences.OnShar
                     MovieDao dao = new SQLLiteMovieDao(getActivity());
                     return dao.findAll();
                 default:
-                    return null;
+                    Log.d(LOG_TAG, "Invalid order...using Popular");
+                    return movieWebService.getPopularMovies();
             }
         }
 
