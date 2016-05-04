@@ -22,26 +22,19 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
         MoviesFragment moviesFragment = new MoviesFragment();
+        if (findViewById(R.id.details_container) != null) {
+            // two pane
+            mDualPane = true;
+            moviesFragment.setDualPane(true);
+        } else {
+            mDualPane = false;
+        }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, moviesFragment)
                     .commit();
         }
-
-        if (findViewById(R.id.details_container) != null) {
-            // two pane
-            mDualPane = true;
-            moviesFragment.setDualPane(true);
-//            MoviesDetailFragment moviesDetailFragment = MoviesDetailFragment.newInstance(null, mDualPane);
-//            moviesDetailFragment.setDualPane(true);
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.details_container, moviesDetailFragment)
-//                    .commit();
-        } else {
-            mDualPane = false;
-        }
-
 
 
     }

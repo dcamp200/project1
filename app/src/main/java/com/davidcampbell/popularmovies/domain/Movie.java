@@ -22,6 +22,7 @@ public class Movie implements Serializable {
     private boolean video;
     private double vote_average;
     private String release_date;
+    private int runtime;
 
 
     public String getRelease_date() {
@@ -136,6 +137,14 @@ public class Movie implements Serializable {
         this.vote_average = vote_average;
     }
 
+    public int getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(int runtime) {
+        this.runtime = runtime;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
@@ -153,6 +162,7 @@ public class Movie implements Serializable {
                 ", video=" + video +
                 ", vote_average=" + vote_average +
                 ", release_date='" + release_date + '\'' +
+                ", runtime=" + runtime +
                 '}';
     }
 }

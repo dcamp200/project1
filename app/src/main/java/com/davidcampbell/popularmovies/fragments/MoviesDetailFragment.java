@@ -47,6 +47,7 @@ public class MoviesDetailFragment extends Fragment {
     private static final String REVIEWS = "Reviews";
     @Bind(R.id.poster) ImageView moviePoster;
     @Bind(R.id.movieName) TextView movieName;
+    @Bind(R.id.runtime) TextView runtime;
     @Bind(R.id.releasedate) TextView releaseDate;
     @Bind(R.id.userRating) TextView userRating;
     @Bind(R.id.year) TextView yearView;
@@ -123,6 +124,7 @@ public class MoviesDetailFragment extends Fragment {
         }
 
         if (mMovie != null) {
+            new FetchMovie().execute(mMovie.getId());
             new FetchMovieTrailersTask().execute(mMovie.getId());
             new FetchMovieReviewsTask().execute(mMovie.getId());
             Log.d(LOG_TAG, "Movie.." + mMovie);
@@ -169,13 +171,34 @@ public class MoviesDetailFragment extends Fragment {
         }
     }
 
+    class FetchMovie extends AsyncTask<Long, Void, Movie> {
+
+        @Override
+        protected Movie doInBackground(Long... params) {
+            long movieId = params[0];
+            Log.d(LOG_TAG, "Fetching movie details for id " + movieId);
+            MovieWebService movieWebService = new RetrofitMovieWebService();
+            Movie movie = movieWebService.getMovie(movieId);
+            return movie;
+        }
+
+        @Override
+        protected void onPostExecute(Movie movie) {
+            super.onPostExecute(movie);
+            Log.d(LOG_TAG, "Returned " + movie);
+            if (movie != null) {
+                runtime.setText(movie.getRuntime() + " mins");
+            }
+
+        }
+    }
 
     class FetchMovieTrailersTask extends AsyncTask<Long, Void, List<Trailer>> {
 
         @Override
         protected List<Trailer> doInBackground(Long... params) {
             long movieId = params[0];
-            Log.d(LOG_TAG, "Fetching movie details for id " + movieId);
+            Log.d(LOG_TAG, "Fetching movie trailers for id " + movieId);
             MovieWebService movieWebService = new RetrofitMovieWebService();
             List<Trailer> trailers = movieWebService.getTrailers(movieId);
             return trailers;

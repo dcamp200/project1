@@ -38,4 +38,12 @@ public interface MovieWebService {
      * @return List<Review> A list of {@link Review} objects
      */
     List<Review> getReviews(long movieId);
+
+    /**
+     * Get the basic movie information for a specific movie id.
+     * @param movieId
+     * @return Movie An instance od Movie
+     */
+    Movie getMovie(long movieId);
+
 }

@@ -57,6 +57,11 @@ public class RetrofitMovieWebService implements MovieWebService {
     }
 
     @Override
+    public Movie getMovie(long movieId) {
+        return movieDBRestService.getMovie(movieId);
+    }
+
+    @Override
     public List<Trailer> getTrailers(long movieId) {
         TrailerResponse trailerResponse = movieDBRestService.getMovieTrailers(movieId);
         return (trailerResponse != null) ? trailerResponse.getResults() : Collections.<Trailer>emptyList();
@@ -81,6 +86,11 @@ public class RetrofitMovieWebService implements MovieWebService {
         // e.g. http://api.themoviedb.org/3/movie/{id}/reviews?api_key
         @GET("/3/movie/{id}/reviews")
         ReviewsResponse getMovieReviews(@Path("id") long id);
+
+        // e.g. http://api.themoviedb.org/3/movie/{id}
+        @GET("/3/movie/{id}")
+        Movie getMovie(@Path("id") long id);
+
 
     }
 

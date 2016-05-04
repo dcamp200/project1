@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@android:color/white"
     tools:context="com.davidcampbell.popularmovies.fragments.MoviesDetailFragment">
 
 <LinearLayout
@@ -49,7 +50,7 @@
             android:background="@android:color/white"
             />
 
-        <TextView android:id="@+id/length"
+        <TextView android:id="@+id/runtime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/poster"
@@ -67,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/poster"
-            android:layout_below="@id/length"
+            android:layout_below="@id/runtime"
             android:layout_marginTop="10dp"
             tools:text="8/1/10"
             android:textSize="16sp"
@@ -90,9 +91,10 @@
             />
 
         <ImageButton android:id="@+id/favButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/icon_favorite_default"
+            android:background="@android:color/white"
             android:layout_below="@+id/userRating"
             android:layout_toRightOf="@id/poster"
             />
