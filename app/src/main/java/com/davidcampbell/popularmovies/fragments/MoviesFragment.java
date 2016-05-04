@@ -39,6 +39,14 @@ public class MoviesFragment extends Fragment implements SharedPreferences.OnShar
     @Bind(R.id.posterGrid) GridView mPosterGrid;
     private MovieAdapter mGridArrayAdapter;
 
+    public static MoviesFragment newInstance(boolean dualPane) {
+        MoviesFragment fragment = new MoviesFragment();
+        Bundle args = new Bundle();
+        args.putBoolean("dualPane", dualPane);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public MoviesFragment() {
         // Required empty public constructor
     }
@@ -55,6 +63,9 @@ public class MoviesFragment extends Fragment implements SharedPreferences.OnShar
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            dualPane = getArguments().getBoolean("dualPane");
+        }
     }
 
     @Override

@@ -21,15 +21,14 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
-        MoviesFragment moviesFragment = new MoviesFragment();
+
         if (findViewById(R.id.details_container) != null) {
             // two pane
             mDualPane = true;
-            moviesFragment.setDualPane(true);
         } else {
             mDualPane = false;
         }
-
+        MoviesFragment moviesFragment = MoviesFragment.newInstance(mDualPane);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, moviesFragment)
