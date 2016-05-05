@@ -30,7 +30,7 @@ public class RetrofitMovieWebService implements MovieWebService {
 
     public RetrofitMovieWebService() {
         movieDBRestAdapter = new RestAdapter.Builder()
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .setRequestInterceptor(movieDBRequestInterceptor)
                 .setEndpoint(endPoint).build();
         movieDBRestService = movieDBRestAdapter.create(MovieDBRestService.class);

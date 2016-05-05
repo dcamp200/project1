@@ -29,7 +29,7 @@ public class MovieReviewActivity extends AppCompatActivity {
         authorTextView.setText("A movie review by " + review.getAuthor());
 
         toolbar.setTitle("Popular Movies Review: " + review.getMovieTitle());
-        toolbar.setNavigationIcon(R.drawable.ic_clear_black_24dp);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         setSupportActionBar(toolbar);
 
     }

@@ -1,13 +1,19 @@
 package com.davidcampbell.popularmovies.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -43,6 +49,7 @@ import butterknife.OnClick;
 public class MoviesDetailFragment extends Fragment {
     private static final String LOG_TAG = MoviesDetailFragment.class.getSimpleName();
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w185/";
+    private static final String YOUTUBE_BASE_URL = "http://www.youtube.com/watch?v=";
     private static final String TRAILERS = "Trailers";
     private static final String REVIEWS = "Reviews";
     @Bind(R.id.poster) ImageView moviePoster;
@@ -54,10 +61,12 @@ public class MoviesDetailFragment extends Fragment {
     @Bind(R.id.description) TextView descriptionView;
     @Bind(R.id.favButton) ImageButton favButton;
 
+    private ShareActionProvider mShareActionProvider;
     private TrailerAdapter mTrailerAdapter;
     private ReviewAdapter mReviewAdapter;
     private MovieDao movieDao;
     private Movie mMovie;
+    private String mTrailerUrl;
     private Bitmap favourited;
     private Bitmap notFavourited;
 
@@ -97,6 +106,7 @@ public class MoviesDetailFragment extends Fragment {
             mMovie = (Movie)getArguments().getSerializable("movie");
             dualPane = getArguments().getBoolean("dualPane");
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -158,6 +168,35 @@ public class MoviesDetailFragment extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.detailfragment, menu);
+
+        // Retrieve the share menu item
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+
+        // Get the provider and hold onto it to set/change the share intent.
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+
+        if (mShareActionProvider != null) {
+            if (mTrailerUrl != null) {
+                mShareActionProvider.setShareIntent(createShareTrailerIntent(mTrailerUrl));
+            }
+        }
+    }
+
+
+
+    private Intent createShareTrailerIntent(String trailerUrl) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, trailerUrl);
+        return shareIntent;
+    }
+
 
     @OnClick(R.id.favButton)
     public void onClickFavorite() {
@@ -201,6 +240,12 @@ public class MoviesDetailFragment extends Fragment {
             Log.d(LOG_TAG, "Fetching movie trailers for id " + movieId);
             MovieWebService movieWebService = new RetrofitMovieWebService();
             List<Trailer> trailers = movieWebService.getTrailers(movieId);
+            if (trailers.size() > 0) {
+                mTrailerUrl = YOUTUBE_BASE_URL + trailers.get(0).getKey();
+                if (mShareActionProvider != null) {
+                    mShareActionProvider.setShareIntent(createShareTrailerIntent(mTrailerUrl));
+                }
+            }
             return trailers;
         }
 
