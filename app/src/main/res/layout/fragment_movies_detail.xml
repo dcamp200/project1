@@ -91,12 +91,14 @@
             />
 
         <ImageButton android:id="@+id/favButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/icon_favorite_default"
             android:background="@android:color/white"
             android:layout_below="@+id/userRating"
             android:layout_toRightOf="@id/poster"
+            android:padding="5dp"
             />
 
         <ScrollView android:id="@+id/scrollView"

@@ -88,22 +88,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean b, View view, ViewGroup viewGroup) {
 
-        if (view == null) {
-            LayoutInflater inflater = mContext.getLayoutInflater();
-            switch (groupPosition) {
-                case 0:
-                    view = inflater.inflate(R.layout.movie_trailer,null);
-                    break;
-                case 1:
-                    view = inflater.inflate(R.layout.movie_review,null);
-                    break;
-            }
-
-        }
+        LayoutInflater inflater = mContext.getLayoutInflater();
 
         switch (groupPosition) {
             case 0:
                 final Trailer trailer = (Trailer)getChild(0,childPosition);
+                view = inflater.inflate(R.layout.movie_trailer,null);
                 TextView textView = (TextView)view.findViewById(R.id.trailerName);
                 textView.setText(trailer.getName());
                 ImageButton playButton = (ImageButton)view.findViewById(R.id.playButton);
@@ -117,6 +107,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 break;
             case 1:
                 final Review review = (Review)getChild(1,childPosition);
+                view = inflater.inflate(R.layout.movie_review,null);
                 TextView author = (TextView)view.findViewById(R.id.author);
                 author.setText(review.getAuthor());
                 textView = (TextView)view.findViewById(R.id.reviewText);
@@ -124,9 +115,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mContext, MovieReviewActivity.class);
-                        intent.putExtra("review", review);
-                        mContext.startActivity(intent);
+                        startReviewActivity(review);
+                    }
+                });
+                TextView readmore = (TextView)view.findViewById(R.id.more);
+                readmore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startReviewActivity(review);
                     }
                 });
                 break;
@@ -134,6 +130,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 
         return view;
+    }
+
+    private void startReviewActivity(Review review) {
+        Intent intent = new Intent(mContext, MovieReviewActivity.class);
+        intent.putExtra("review", review);
+        mContext.startActivity(intent);
     }
 
     @Override

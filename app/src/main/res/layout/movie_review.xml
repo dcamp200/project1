@@ -23,6 +23,7 @@
         <TextView android:id="@+id/more"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:text="Read More"
             android:gravity="center"/>
 
