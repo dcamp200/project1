@@ -240,12 +240,7 @@ public class MoviesDetailFragment extends Fragment {
             Log.d(LOG_TAG, "Fetching movie trailers for id " + movieId);
             MovieWebService movieWebService = new RetrofitMovieWebService();
             List<Trailer> trailers = movieWebService.getTrailers(movieId);
-            if (trailers.size() > 0) {
-                mTrailerUrl = YOUTUBE_BASE_URL + trailers.get(0).getKey();
-                if (mShareActionProvider != null) {
-                    mShareActionProvider.setShareIntent(createShareTrailerIntent(mTrailerUrl));
-                }
-            }
+
             return trailers;
         }
 
@@ -253,6 +248,12 @@ public class MoviesDetailFragment extends Fragment {
         protected void onPostExecute(List<Trailer> trailers) {
             super.onPostExecute(trailers);
             Log.d(LOG_TAG, "Returned " + trailers.size() + " trailers.");
+            if (trailers.size() > 0) {
+                mTrailerUrl = YOUTUBE_BASE_URL + trailers.get(0).getKey();
+                if (mShareActionProvider != null) {
+                    mShareActionProvider.setShareIntent(createShareTrailerIntent(mTrailerUrl));
+                }
+            }
             expandableListAdapter.updateChildren(TRAILERS,trailers);
             expandableListAdapter.notifyDataSetChanged();
         }
