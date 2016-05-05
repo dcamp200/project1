@@ -221,6 +221,9 @@ public class MoviesDetailFragment extends Fragment {
             Log.d(LOG_TAG, "Fetching movie reviews for id " + movieId);
             MovieWebService movieWebService = new RetrofitMovieWebService();
             List<Review> reviews = movieWebService.getReviews(movieId);
+            for(Review review:reviews) {
+                review.setMovieTitle(mMovie.getTitle());
+            }
             return reviews;
         }
 

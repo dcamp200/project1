@@ -12,6 +12,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.davidcampbell.popularmovies.MovieReviewActivity;
 import com.davidcampbell.popularmovies.R;
 import com.davidcampbell.popularmovies.domain.Review;
 import com.davidcampbell.popularmovies.domain.Trailer;
@@ -115,9 +116,19 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 });
                 break;
             case 1:
-                Review review = (Review)getChild(1,childPosition);
+                final Review review = (Review)getChild(1,childPosition);
+                TextView author = (TextView)view.findViewById(R.id.author);
+                author.setText(review.getAuthor());
                 textView = (TextView)view.findViewById(R.id.reviewText);
                 textView.setText(review.getContent());
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, MovieReviewActivity.class);
+                        intent.putExtra("review", review);
+                        mContext.startActivity(intent);
+                    }
+                });
                 break;
         }
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_smallmargin"
+    android:paddingLeft="@dimen/activity_horizontal_smallmargin"
+    android:paddingRight="@dimen/activity_horizontal_smallmargin"
+    android:paddingTop="@dimen/activity_vertical_smallmargin"
+    tools:context=".MovieReviewActivity">
+
+
+    <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="@color/green"
+        android:minHeight="?android:attr/actionBarSize"
+        android:titleTextColor="@android:color/white"
+        android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar"
+        android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+        android:title="@string/app_name"
+        android:elevation="8dp"
+        />
+
+
+    <TextView android:id="@+id/reviewAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:textStyle="bold"
+        android:textSize="22dp"
+        android:layout_margin="20dp"
+        android:layout_marginBottom="10dp"
+        android:elevation="4dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reviewAuthor">
+        <TextView android:id="@+id/reviewContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="50dp"
+
+            />
+    </ScrollView>
+
+</RelativeLayout>
